@@ -2,7 +2,8 @@ import cv2
 import easyocr
 import openai
 import os 
-
+from . import key
+print(key)
 carpeta = "traducciones"
 archivo = "japo.txt"
 ruta_archivo = os.path.join(carpeta, archivo)
