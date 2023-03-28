@@ -2,36 +2,43 @@ import cv2
 import easyocr
 import openai
 import os 
-from . import key
-print(key)
+import pytesseract
+
+
+
+with open("apikey.txt", "r") as f:
+    api_key = f.read().strip()
+ 
 carpeta = "traducciones"
 archivo = "japo.txt"
 ruta_archivo = os.path.join(carpeta, archivo)
 
-openai.api_key = apikey
+openai.api_key = api_key
 
 target_language = "es-ES"
 
 reader = easyocr.Reader(["ja"], gpu=False)
 
 
-image = cv2.imread("./1.jpg")
-print(1)
-result = reader.readtext(image, paragraph=True)
 
+image = cv2.imread("./2.jpg")
+res = reader.readtext(image, paragraph=True)
 
+result = pytesseract.image_to_string(image, lang='jpn')
+print(res)
 print(result)
-for res in result:
-    
-    text = " ".join(res[1])
-    text = text.replace("\n", " ")
-    text = text.replace("   ", "+")
-    text = text.replace(" -+", "")
-    text = text.replace(" ", "")
-    text = text.replace("+", " ")
-    text = text.lower()
-    text = text.strip()
 
+for text in result:
+    
+    # text = " ".join(res[1])
+    # text = text.replace("\n", " ")
+    # text = text.replace("   ", "+")
+    # text = text.replace(" -+", "")
+    # text = text.replace(" ", "")
+    # text = text.replace("+", " ")
+    # text = text.lower()
+    # text = text.strip()
+    print(text)
     with open(ruta_archivo, mode="a") as archivo:
         archivo.write(f"***********************\n{text}")
 
@@ -46,8 +53,8 @@ for res in result:
     
     with open(ruta_archivo, mode="a") as archivo:
         archivo.write(f"\n{trad['t1']}\n{trad['t2']}\n{trad['t3']}\n\n\n")
-print(1)
 
 # os.mkdir(carpeta)
+
 
 
